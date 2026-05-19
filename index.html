@@ -240,6 +240,7 @@ button {
       <div class="note-actions">
         <button id="saveNote">儲存記事</button>
         <button id="deleteNote" class="danger">刪除記事</button>
+        <button id="exportNotes">匯出到 Excel</button>
       </div>
     </section>
   </div>
@@ -252,6 +253,7 @@ const selectedDateLabel = document.getElementById('selectedDateLabel');
 const noteText = document.getElementById('noteText');
 const saveNote = document.getElementById('saveNote');
 const deleteNote = document.getElementById('deleteNote');
+const exportNotes = document.getElementById('exportNotes');
 const prevMonth = document.getElementById('prevMonth');
 const nextMonth = document.getElementById('nextMonth');
 
@@ -398,8 +400,35 @@ nextMonth.addEventListener('click', () => {
 
 saveNote.addEventListener('click', handleSave);
 deleteNote.addEventListener('click', handleDelete);
+exportNotes.addEventListener('click', exportToExcel);
 
 renderCalendar();
+
+function exportToExcel() {
+  const rows = [['日期', '記事內容']];
+  const sortedKeys = Object.keys(data).sort();
+
+  sortedKeys.forEach((key) => {
+    rows.push([key, data[key].replace(/\r?\n/g, '\\n')]);
+  });
+
+  if (rows.length === 1) {
+    alert('目前沒有記事可匯出。');
+    return;
+  }
+
+  const csvContent = rows.map((row) => row.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(',')).join('\r\n');
+  const bom = '\uFEFF';
+  const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'calendar-notes.csv';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
   </script>
 </body>
 </html>
