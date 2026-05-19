@@ -162,6 +162,12 @@ p {
   margin-bottom: 14px;
 }
 
+.search-label {
+  color: var(--text);
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
 #searchInput {
   width: 100%;
   border: 1px solid var(--border);
@@ -286,6 +292,7 @@ button {
         <span id="selectedDateLabel">尚未選取日期</span>
       </div>
       <div class="search-block">
+        <label for="searchInput" class="search-label">搜尋記事</label>
         <input id="searchInput" type="search" placeholder="搜尋記事內容或日期..." />
         <div id="searchResults" class="search-results"></div>
       </div>
