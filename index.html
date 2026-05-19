@@ -168,13 +168,24 @@ p {
   font-weight: 700;
 }
 
+.search-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 #searchInput {
-  width: 100%;
+  flex: 1;
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 14px 16px;
   font-size: 1rem;
   background: #fff;
+}
+
+.secondary {
+  background: #e2e8f0;
+  color: var(--text);
 }
 
 .search-results {
@@ -293,7 +304,10 @@ button {
       </div>
       <div class="search-block">
         <label for="searchInput" class="search-label">搜尋記事</label>
-        <input id="searchInput" type="search" placeholder="搜尋記事內容或日期..." />
+        <div class="search-row">
+          <input id="searchInput" type="search" placeholder="搜尋記事內容或日期..." />
+          <button id="clearSearch" type="button" class="secondary">清除</button>
+        </div>
         <div id="searchResults" class="search-results"></div>
       </div>
       <textarea id="noteText" placeholder="在此輸入記事內容..."></textarea>
@@ -315,6 +329,7 @@ const saveNote = document.getElementById('saveNote');
 const deleteNote = document.getElementById('deleteNote');
 const exportNotes = document.getElementById('exportNotes');
 const searchInput = document.getElementById('searchInput');
+const clearSearch = document.getElementById('clearSearch');
 const searchResults = document.getElementById('searchResults');
 const prevMonth = document.getElementById('prevMonth');
 const nextMonth = document.getElementById('nextMonth');
@@ -464,6 +479,7 @@ saveNote.addEventListener('click', handleSave);
 deleteNote.addEventListener('click', handleDelete);
 exportNotes.addEventListener('click', exportToExcel);
 searchInput.addEventListener('input', handleSearch);
+clearSearch.addEventListener('click', clearSearchResults);
 
 renderCalendar();
 
@@ -510,6 +526,12 @@ function handleSearch() {
     item.appendChild(snippet);
     searchResults.appendChild(item);
   });
+}
+
+function clearSearchResults() {
+  searchInput.value = '';
+  searchResults.innerHTML = '';
+  searchInput.focus();
 }
 
 function exportToExcel() {
